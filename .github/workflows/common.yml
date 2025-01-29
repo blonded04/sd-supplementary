@@ -1,0 +1,21 @@
+name: sd-hw-algorithms-analysis
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: run ci
+      run: echo "Hello"
+# jobs:
+# test:
+#   runs-on: ubuntu-latest
+#   steps:
+#   - name: checkout repo
+#     uses: actions/checkout@master
+#   - name: build application
+#     run: make test && make test_sanitize
