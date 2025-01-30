@@ -22,12 +22,12 @@ public:
 
     void exclusive_lock() override {
         m_qnode.next.store(nullptr, std::memory_order_release);
-        mcs_node_t *pred = m_tail.exchange(m_qnode.next.load(std::memory_order_relaxed), std::memory_order_acq_rel);
+        mcs_node_t *pred = m_tail.exchange(m_qnode.next.load(std::memory_order_relaxed), std::memory_order_acquire);
         if (pred != nullptr) {
             m_qnode.locked.store(true, std::memory_order_relaxed);
             pred->next.store(&m_qnode, std::memory_order_release);
             std::uint64_t spins = 0;
-            while (m_qnode.locked.load(std::memory_order_acq_rel)) {
+            while (m_qnode.locked.load(std::memory_order_acquire)) {
                 spins++;
                 if (spins >= kSpinsThresholdBeforeYield) {
                     std::this_thread::yield();
